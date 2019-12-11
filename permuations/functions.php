@@ -53,3 +53,44 @@ function ValidateAPIParams(array $get_params){
         die;
     }
 }
+
+function GenerateResults(array $get_params){
+    //Ici on prépare notre array pour la passer a notre fonction de génération puis on retourne le resultat
+    $arr_states = ['o','x'];
+    $arr_all_possibilities = [];
+    $count_param = count($get_params);
+    for($index=0;$index<$count_param;$index++){
+        if($get_params["states[$index]"] =='.'){
+            $arr_all_possibilities[$index] = $arr_states;
+        }else{
+            $arr_all_possibilities[$index] = [$get_params["states[$index]"]];
+        }
+    }
+    $results = GenerateCombinations($arr_all_possibilities);
+    return json_encode($results);
+}
+
+function GenerateCombinations($arrays, $i = 0) {
+    if (!isset($arrays[$i])) {
+        return array();
+    }
+    if ($i == count($arrays) - 1) {
+        return $arrays[$i];
+    }
+
+    // Ici on va chercher les combinaisons des tableau subséquent et on les met dans une variable temporaire
+    $tmp = GenerateCombinations($arrays, $i + 1);
+
+    $result = array();
+
+    // Ici on merge notre array temporaire avec chaque index de notre array $arrays
+    foreach ($arrays[$i] as $v) {
+        foreach ($tmp as $t) {
+            $result[] = is_array($t) ?
+                array_merge(array($v), $t) :
+                array($v, $t);
+        }
+    }
+
+    return $result;
+}
