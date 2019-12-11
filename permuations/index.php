@@ -8,5 +8,7 @@ $arr_parsed_param = ParseGetParameters();
 //Ici on valide les paramètres
 ValidateAPIParams($arr_parsed_param);
 
+//Ici on génère tout les resultat et on retourne ca encodé en json
+echo GenerateResults($arr_parsed_param);
 
 ?>
