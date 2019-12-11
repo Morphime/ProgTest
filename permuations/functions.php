@@ -8,16 +8,21 @@
 function ParseGetParameters(){
     $arr_parsed_params = [];
     $query =  parse_url($_SERVER['REQUEST_URI'],PHP_URL_QUERY );
-    foreach (explode('&', $query) as $chunk) {
-        $param = explode("=", $chunk);
+    if(!is_null($query)){
+        foreach (explode('&', $query) as $chunk) {
+            $param = explode("=", $chunk);
 
-        if ($param) {
-            $parameter_name =  urldecode($param[0]);
-            $parameter_value =  urldecode($param[1]);
-            $arr_parsed_params[$parameter_name] = $parameter_value;
+            if ($param) {
+                $parameter_name =  urldecode($param[0]);
+                $parameter_value =  urldecode($param[1]);
+                $arr_parsed_params[$parameter_name] = $parameter_value;
+            }
         }
+        return $arr_parsed_params;
+    }else{
+        return [];
     }
-    return $arr_parsed_params;
+
 }
 
 function ValidateAPIParams(array $get_params){
@@ -66,11 +71,11 @@ function GenerateResults(array $get_params){
             $arr_all_possibilities[$index] = [$get_params["states[$index]"]];
         }
     }
-    $results = GenerateCombinations($arr_all_possibilities);
+    $results = combinations($arr_all_possibilities);
     return json_encode($results);
 }
 
-function GenerateCombinations($arrays, $i = 0) {
+function combinations($arrays, $i = 0) {
     if (!isset($arrays[$i])) {
         return array();
     }
@@ -79,7 +84,7 @@ function GenerateCombinations($arrays, $i = 0) {
     }
 
     // Ici on va chercher les combinaisons des tableau subséquent et on les met dans une variable temporaire
-    $tmp = GenerateCombinations($arrays, $i + 1);
+    $tmp = combinations($arrays, $i + 1);
 
     $result = array();
 
