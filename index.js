@@ -1,9 +1,11 @@
-var app = new Vue({
-      el: '#app',
-      data: {
-        message: 'Hello Vue!'
-      }
-    })
+import Vue from "./js/vue"
+import App from './App'
 
+Vue.config.productionTip = false
 
-	
+/* eslint-disable no-new */
+new Vue({
+    el: '#app',
+    template: '<App/>',
+    components: { App }
+})
