@@ -3,23 +3,25 @@
         <h3>Demande</h3>
         <h4>Cases</h4>
         <div>
-            <select name="case_selector" v-model="selected" v-on:change="generateSelectors(selected)" >
-                <option value="3">3</option>
+            <select v-model="selectedcase" v-on:change="generateSelectors(selectedcase)" >
+                <option  value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
         </div>
         <h4>États</h4>
         <div>
-            <StateSelector v-for="stateselector in stateselectors" :key="stateselector.id" :stateselector="stateselector"></StateSelector>
+            <StateSelector v-model="test" v-for="stateselector in stateselectors" :key="stateselector.id" :stateselector="stateselector" v-on:childToParent="onChildClick"></StateSelector>
         </div>
-        <button name="send_api_request">Envoyer</button>
+        <button @click="sendAPIrequest()">Envoyer</button>
     </div>
 </template>
 
 <script>
 
     import StateSelector from "./StateSelector";
+
+    window.axios = require('axios');
 
     export default {
         components: {
@@ -28,29 +30,24 @@
         name: "Requestform",
         data: function () {
             return {
-                selected: "",
+                selectedcase: "3",
+                test: "",
                 stateselectors: [
                     {
                         id: 0,
-                        name: 'state[0]',
+                        name: 'states[0]',
+                        selected: ".",
                     },
                     {
                         id: 1,
-                        name: 'state[1]',
+                        name: 'states[1]',
+                        selected: ".",
                     },
                     {
                         id: 2,
-                        name: 'state[2]',
-                    },
-                    {
-                        id: 3,
-                        name: 'state[3]',
-                    },
-                    {
-                        id: 4,
-                        name: 'state[4]',
-                    },
-
+                        name: 'states[2]',
+                        selected: ".",
+                    }
                 ]
             }
         },
@@ -62,19 +59,41 @@
                 if(selected>selectorscount){
                     var i;
                     for(i=selectorscount; i<selected; i++){
-                        var current_index = i-1;
+                        var current_index = i;
                         current_index.toString();
                         this.stateselectors.push({
-                            id: i-1,
-                            name: "state["+ current_index +"]"
+                            id: i,
+                            name: "states["+ current_index +"]",
+                            selected: ".",
                         });
                     }
                 }else if(selectorscount>selected){
                     this.stateselectors = this.stateselectors.filter(stateselector => {
-                        console .log(stateselector.id);
                         return stateselector.id <selected
                     });
                 }
+            },
+
+            sendAPIrequest(){
+                var urlparams ="";
+                this.stateselectors.forEach(function(item){
+                    if(urlparams===""){
+                        urlparams = "?";
+                    }else{
+                        urlparams = urlparams+"&";
+                    }
+                    urlparams =urlparams + item.name.toString()+"="+item.selected.toString();
+
+                });
+                axios.get('./permutations'+urlparams.toString(), {
+
+                }).then(function(response){
+                        console.log(response.data);
+                    });
+
+            },
+            onChildClick (value,id) {
+                this.stateselectors[id].selected =value
             }
         }
     }
