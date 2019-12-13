@@ -7,6 +7,9 @@ new Vue({
 
     components:{
       Requestform,
+    },
+    data: {
+        thing:""
     }
 });
 
