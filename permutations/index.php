@@ -11,4 +11,4 @@ ValidateAPIParams($arr_parsed_param);
 //Ici on génère tout les resultat et on retourne ca encodé en json
 echo GenerateResults($arr_parsed_param);
 
-?>
+

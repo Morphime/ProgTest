@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Fonction pour aller chercher les parametre en get lorsqu'ils utilise des charactere réservé
+ * Fonction pour aller chercher les parametre en get lorsqu'ils utilise des charactere réservé comme les [] et le .
  *
  * @return array $arr_parsed_params
  */
@@ -25,6 +25,11 @@ function ParseGetParameters(){
 
 }
 
+/**
+ * Fonction qui va faire tout les vérification avec nos variable get pour s'assurer que le tout peux etre traiter avec notre fonction de generation de resultat
+ *
+ * @param array $get_params Les paramètre parser par notre fonction ParseGetParameter OU le $_GET direct
+ */
 function ValidateAPIParams(array $get_params){
     $result = true;
     $arr_params = ['states[0]','states[1]','states[2]','states[3]','states[4]'];
@@ -59,6 +64,12 @@ function ValidateAPIParams(array $get_params){
     }
 }
 
+/**
+ * Fonction permetant de préparer nos array dans chaque case avec leur possibilité le tout donant 1 array par case
+ *
+ * @param array $get_params
+ * @return false|string
+ */
 function GenerateResults(array $get_params){
     //Ici on prépare notre array pour la passer a notre fonction de génération puis on retourne le resultat
     $arr_states = ['o','x'];
@@ -75,6 +86,13 @@ function GenerateResults(array $get_params){
     return json_encode($results);
 }
 
+/**
+ * Ici on génère les combinaison avec les array de chaque case
+ *
+ * @param $arrays
+ * @param int $i
+ * @return array|mixed
+ */
 function combinations($arrays, $i = 0) {
     if (!isset($arrays[$i])) {
         return array();
@@ -83,7 +101,7 @@ function combinations($arrays, $i = 0) {
         return $arrays[$i];
     }
 
-    // Ici on va chercher les combinaisons des tableau subséquent et on les met dans une variable temporaire
+    // Ici on va chercher les combinaisons des tableau subséquent et on les met dans une variable temporaire pour être réutiliser a la fin et merge le tout
     $tmp = combinations($arrays, $i + 1);
 
     $result = array();
