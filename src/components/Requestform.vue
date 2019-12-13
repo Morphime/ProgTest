@@ -1,20 +1,22 @@
 <template>
-    <div>
-        <h3>Demande</h3>
-        <h4>Cases</h4>
-        <div>
-            <select v-model="selectedcase" v-on:change="generateSelectors(selectedcase)" >
-                <option  value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
+    <div class="maindiv">
+        <div class="listwrapper">
+            <h3>Demande</h3>
+            <h4>Cases</h4>
+            <div>
+                <select v-model="selectedcase" v-on:change="generateSelectors(selectedcase)" >
+                    <option  value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <h4>États</h4>
+            <div>
+                <StateSelector v-for="stateselector in stateselectors" :key="stateselector.id" :stateselector="stateselector" v-on:childToParent="onChildClick"></StateSelector>
+            </div>
+            <button @click="sendAPIrequest()">Envoyer</button>
         </div>
-        <h4>États</h4>
-        <div>
-            <StateSelector v-for="stateselector in stateselectors" :key="stateselector.id" :stateselector="stateselector" v-on:childToParent="onChildClick"></StateSelector>
-        </div>
-        <button @click="sendAPIrequest()">Envoyer</button>
-        <div>
+        <div class="listwrapper">
             <h3>Résultats</h3>
             <ResultList v-for="result in apiresult" :key="result.id" :Results="result"></ResultList>
         </div>
@@ -107,5 +109,12 @@
 </script>
 
 <style scoped>
-
+    .maindiv
+    {
+        display:flex;
+    }
+    .listwrapper
+    {
+        width: 10%;
+    }
 </style>

@@ -25,6 +25,6 @@
 <style scoped>
     .wrapper
     {
-
+        position:relative
     }
 </style>

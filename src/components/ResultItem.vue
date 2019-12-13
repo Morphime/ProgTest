@@ -19,6 +19,11 @@
 <style scoped>
     .align-serie
     {
-        float: left;
+        padding: 4px;
+        text-align: center;
+        margin-left: 10px;
+        border-style: solid;
+        border-width: 2px;
+        display:inline-block;
     }
 </style>
