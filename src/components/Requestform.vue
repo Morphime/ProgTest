@@ -11,21 +11,27 @@
         </div>
         <h4>États</h4>
         <div>
-            <StateSelector v-model="test" v-for="stateselector in stateselectors" :key="stateselector.id" :stateselector="stateselector" v-on:childToParent="onChildClick"></StateSelector>
+            <StateSelector v-for="stateselector in stateselectors" :key="stateselector.id" :stateselector="stateselector" v-on:childToParent="onChildClick"></StateSelector>
         </div>
         <button @click="sendAPIrequest()">Envoyer</button>
+        <div>
+            <h3>Résultats</h3>
+            <ResultList v-for="result in apiresult" :key="result.id" :Results="result"></ResultList>
+        </div>
     </div>
 </template>
 
 <script>
 
     import StateSelector from "./StateSelector";
+    import ResultList from "./ResultList";
 
     window.axios = require('axios');
 
     export default {
         components: {
-            StateSelector
+            StateSelector,
+            ResultList
         },
         name: "Requestform",
         data: function () {
@@ -48,7 +54,8 @@
                         name: 'states[2]',
                         selected: ".",
                     }
-                ]
+                ],
+                apiresult: ""
             }
         },
         methods: {
@@ -88,8 +95,8 @@
                 axios.get('./permutations'+urlparams.toString(), {
 
                 }).then(function(response){
-                        console.log(response.data);
-                    });
+                        this.apiresult = response.data;
+                    }.bind(this));
 
             },
             onChildClick (value,id) {
